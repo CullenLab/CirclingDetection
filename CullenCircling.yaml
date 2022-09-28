@@ -1,0 +1,11 @@
+# CullenCircling.yaml
+
+name: CullenCircling
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8.13
+  - scipy==1.9.1 
+  - pandas==1.5.0
+  - numpy==1.23.3
+  - tk==8.6.12
