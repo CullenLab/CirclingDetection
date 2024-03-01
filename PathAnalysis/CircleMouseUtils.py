@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
-# Circling Mouse Utilities
+"""
+Created on Fri Nov 12 15:08:42 2021
 
+@author: Oli
+"""
+
+# Circling Mouse Utilities
+#   Use for common fcns across methods
 import numpy as np
 from scipy.spatial import ConvexHull
 
@@ -67,7 +73,6 @@ def doIntersect(p1,q1,p2,q2):
 	return False
 	
 # This code is contributed by Ansh Riyal
-
 ##########################################################################
 
 # from https://stackoverflow.com/questions/13542855/algorithm-to-find-the-minimum-area-rectangle-for-given-points-in-order-to-comput/33619018#33619018
@@ -131,16 +136,16 @@ def minBoundingRect(points):
     width = abs(x1-x2)
     height = abs(y1-y2)
     aspect = max([width/height, height/width])
-    diameter = min(width, height)
+    diameter = max(width, height)
 
     return aspect, diameter
 
-##########################################################################
-
 def checkAngle(nturns):
     body_vector_angles = nturns - nturns[0]
+    
+    # Instead of ONLY taking final versus start, we actually want to look at things frame-by-frame
+    # to prevent messing up where we turn > 180 degrees
     angle_deltas = np.diff(body_vector_angles)
-
     
     # total angle as fraction of a full circle; convert radians to circles
     num_turns = np.abs(np.sum(angle_deltas) / (2*np.pi))

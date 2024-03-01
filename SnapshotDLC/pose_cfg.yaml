@@ -5,32 +5,38 @@ all_joints_names:
 - nose
 - tail
 alpha_r: 0.02
-apply_prob: 1.0
+apply_prob: 0.5
 batch_size: 1
-clahe: true
-claheratio: 0.5
-cropratio: 1.0
+contrast:
+  clahe: true
+  claheratio: 0.5
+  histeq: true
+  histeqratio: 0.5
+convolution:
+  edge: true
+  emboss:
+    alpha:
+    - 0.0
+    - 1.0
+    strength:
+    - 0.5
+    - 1.5
+  embossratio: 0.5
+  sharpen: true
+  sharpenratio: 0.5
 covering: true
-dataset: training-datasets\iteration-0\UnaugmentedDataSet_Circling_FinalJul23\Circling_Final_CullenLab85shuffle4.mat
+crop_by: 0.25
+cropratio: 1.0
+dataset:
+  training-datasets\iteration-0\UnaugmentedDataSet_FullDatasetDec12\FullDataset_CullenLab100shuffle100.mat
 dataset_type: imgaug
 decay_steps: 30000
 display_iters: 100
-edge: true
 elastic_transform: true
-emboss:
-  alpha:
-  - 0.0
-  - 1.0
-  embossratio: 0.5
-  strength:
-  - 0.5
-  - 1.5
 gaussian_noise: 18
 global_scale: 1.0
-histeq: true
-histeqratio: 0.5
-init_weights: Z:\Current-Members\Oliver\CirclingMouse\Circling_Final-CullenLab-2020-07-23\dlc-models\iteration-0\Circling_FinalJul23-trainset85shuffle4\train\snapshot-100000
-#init_weights: C:\Users\culle\anaconda3\envs\dlc\lib\site-packages\deeplabcut\pose_estimation_tensorflow\models\pretrained\resnet_v1_50.ckpt
+init_weights:
+  C:\Users\culle\anaconda3\envs\dlc\lib\site-packages\deeplabcut\pose_estimation_tensorflow\models\pretrained\resnet_v1_50.ckpt
 intermediate_supervision: true
 intermediate_supervision_layer: 6
 location_refinement: true
@@ -38,26 +44,26 @@ locref_huber_loss: true
 locref_loss_weight: 0.05
 locref_stdev: 7.2801
 lr_init: 0.0005
-max_input_size: 2000
-metadataset: training-datasets\iteration-0\UnaugmentedDataSet_Circling_FinalJul23\Documentation_data-Circling_Final_85shuffle4.pickle
-min_input_size: 32
+max_input_size: 1920
+metadataset:
+  training-datasets\iteration-0\UnaugmentedDataSet_FullDatasetDec12\Documentation_data-FullDataset_100shuffle100.pickle
+min_input_size: 64
+mirror: false
 motion_blur: true
-mirror: true
 multi_stage: false
 multi_step:
 - - 0.001
-  - 1000
+  - 100000
 net_type: resnet_50
 num_joints: 2
 pairwise_huber_loss: false
 pairwise_predict: false
 partaffinityfield_predict: false
-pos_dist_thresh: 21
-project_path: Z:\Current-Members\Oliver\CirclingMouse\Circling_Final-CullenLab-2020-07-23
+pos_dist_thresh: 17
+project_path:
+  Z:/Current-Members/Oliver/CircMouseRevision/FullDataset-CullenLab-2023-12-12
 rotation: 180
 rotratio: 1.0
-save_iters: 1000
-scale_jitter_lo: 0.5
-scale_jitter_up: 1.25
-sharpen: true
-sharpenratio: 0.5
+save_iters: 10000
+scale_jitter_lo: 0.25
+scale_jitter_up: 1.0
