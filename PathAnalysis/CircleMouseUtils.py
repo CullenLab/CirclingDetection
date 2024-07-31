@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Nov 12 15:08:42 2021
-
-@author: Oli
-"""
-
 # Circling Mouse Utilities
 #   Use for common fcns across methods
 import numpy as np
 from scipy.spatial import ConvexHull
+from scipy.stats import gaussian_kde, expon
+from scipy.optimize import curve_fit
 
 ############################################################################
 # https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
@@ -149,10 +145,8 @@ def checkAngle(nturns):
     
     # total angle as fraction of a full circle; convert radians to circles
     num_turns = np.abs(np.sum(angle_deltas) / (2*np.pi))
-    # 'consistency': all the time actively spinning "correct" (majority) direction
-    consistency = max(sum(angle_deltas < 0), sum(angle_deltas > 0)) / len(angle_deltas)
     
-    return num_turns, consistency
+    return num_turns
 
 def checkDuplicates(x, y):
     for point1 in range(1, len(x)):
@@ -160,3 +154,47 @@ def checkDuplicates(x, y):
             if doIntersect((x[point1], y[point1]), (x[point1+1], y[point1+1]), (x[point2-1], y[point2-1]), (x[point2], y[point2])):
                 return True
     return False
+    
+# function for fitting 1d distributions
+def poisson_func(x,
+                 w_p,b_p):
+    return w_p*np.exp(-b_p*x)
+
+def guassian_func(x,
+                  w_g,mu_g,sigma_g):
+    return w_g*np.exp(-(x-mu_g)**2/2/sigma_g**2)
+
+def combined_poisson_guassian_func(x,
+                                   w_p,b_p,
+                                   w_g,mu_g,sigma_g):
+    return w_p*np.exp(-b_p*x) + w_g*np.exp(-(x-mu_g)**2/2/sigma_g**2)
+
+def fit_Turns_dist(this_X):
+    # kernel guassian est
+    kernel = gaussian_kde(this_X)
+    
+    # we will fit the kernel guassian distribution with combined poisson and guassian dist
+    X_point = np.arange(0,2.5,0.001)
+    popt, pcov = curve_fit(combined_poisson_guassian_func, X_point, kernel.evaluate(X_point),
+                           bounds=((0,0,0,0.5,0),(np.inf,np.inf,np.inf,np.inf,np.inf)))
+    return popt
+
+def fit_Minor_dist(this_X):
+    # kernel guassian est
+    kernel = gaussian_kde(this_X)
+    
+    # we will fit the kernel guassian distribution with combined poisson and guassian dist
+    X_point = np.arange(0,3,0.001)
+    popt, pcov = curve_fit(combined_poisson_guassian_func, X_point, kernel.evaluate(X_point),
+                           bounds=((0,0,0,0.5,0),(np.inf,np.inf,np.inf,np.inf,np.inf)))
+    return popt
+
+def fit_Major_dist(this_X):
+    # kernel guassian est
+    kernel = gaussian_kde(this_X)
+    
+    # we will fit the kernel guassian distribution with combined poisson and guassian dist
+    X_point = np.arange(0,3,0.001)
+    popt, pcov = curve_fit(combined_poisson_guassian_func, X_point, kernel.evaluate(X_point),
+                           bounds=((0,0,0,1,0),(np.inf,np.inf,np.inf,np.inf,np.inf)))
+    return popt
